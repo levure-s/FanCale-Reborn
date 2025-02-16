@@ -4,14 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class EditProfilePage extends StatelessWidget {
-  const EditProfilePage(this.name, this.description, {super.key});
+  const EditProfilePage(this.name, {super.key});
   final String name;
-  final String description;
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => EditProfileModel(name, description),
+      create: (_) => EditProfileModel(name),
       child: Scaffold(
         appBar: AppBar(title: const Text('プロフィール編集')),
         body: const Center(child: EditForm()),

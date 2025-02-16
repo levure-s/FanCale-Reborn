@@ -24,7 +24,6 @@ class ProfileArea extends StatelessWidget {
             style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
           Text(model.email ?? 'メールアドレスなし'),
-          Text(model.description ?? '自己紹介なし'),
           TextButton(
               onPressed: () async {
                 bool isSuccess = false;

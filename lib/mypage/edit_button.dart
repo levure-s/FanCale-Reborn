@@ -17,8 +17,7 @@ class EditButton extends StatelessWidget {
           await Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => EditProfilePage(
-                      model.name ?? '', model.description ?? '')));
+                  builder: (context) => EditProfilePage(model.name ?? '')));
           model.feachUser();
           home.featchColor();
         },
