@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 class MyModel extends ChangeNotifier {
   String? name;
   String? email;
-  String? description;
 
   bool isLoading = false;
 
@@ -29,7 +28,6 @@ class MyModel extends ChangeNotifier {
         await FirebaseFirestore.instance.collection('users').doc(uid).get();
     final data = snapshot.data();
     name = data?['name'];
-    description = data?['description'];
 
     endLoading();
 
