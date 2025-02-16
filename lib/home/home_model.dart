@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 class HomeModel extends ChangeNotifier {
   bool isLogin = false;
   MaterialColor color = Colors.blue;
+  Color textColor = Colors.white;
 
   void initialize() {
     checkLoginInfo();
@@ -23,6 +24,7 @@ class HomeModel extends ChangeNotifier {
 
   void setColor(Color newcolor) {
     color = _createMaterialColor(newcolor);
+    textColor = _getContrastColor(newcolor);
     notifyListeners();
   }
 
@@ -44,6 +46,7 @@ class HomeModel extends ChangeNotifier {
 
     int colorNum = data['color'];
     color = _createMaterialColor(Color(colorNum));
+    textColor = _getContrastColor(Color(colorNum));
     notifyListeners();
   }
 
@@ -70,5 +73,11 @@ class HomeModel extends ChangeNotifier {
       );
     }
     return MaterialColor(color.value, swatch);
+  }
+
+  Color _getContrastColor(Color backgroundColor) {
+    return backgroundColor.computeLuminance() > 0.5
+        ? Colors.black
+        : Colors.white;
   }
 }

@@ -14,7 +14,16 @@ class HomePage extends StatelessWidget {
     return MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
-          primarySwatch: model.color,
+          colorScheme: ColorScheme.fromSeed(seedColor: model.color),
+          useMaterial3: true,
+          appBarTheme: AppBarTheme(
+              backgroundColor: model.color, foregroundColor: model.textColor),
+          elevatedButtonTheme: ElevatedButtonThemeData(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: model.color,
+              foregroundColor: model.textColor,
+            ),
+          ),
         ),
         home: model.isLogin ? const CalenderPage() : const LoginPage());
   }
