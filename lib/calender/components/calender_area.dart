@@ -18,6 +18,7 @@ class CalenderArea extends StatelessWidget {
       lastDay: DateTime.utc(2030, 12, 31),
       focusedDay: model.focusedDay,
       calendarFormat: model.calendarFormat,
+      eventLoader: model.getEventsForDay,
       onFormatChanged: (format) {
         model.changeFormat(format);
       },

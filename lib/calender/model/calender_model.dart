@@ -10,13 +10,17 @@ class Calender extends ChangeNotifier {
   CalendarFormat calendarFormat = CalendarFormat.month;
   DateTime focusedDay = DateTime.now();
   DateTime? selectedDay;
-  List<QueryDocumentSnapshot>? documents;
-  List<QueryDocumentSnapshot>? filteredDocuments;
+  List<QueryDocumentSnapshot>? myDocuments;
+  List<QueryDocumentSnapshot>? selectedDayDocuments;
 
   void fetchCalender() {
     _snapshots.listen((QuerySnapshot snapshot) {
-      final List<QueryDocumentSnapshot> docs = snapshot.docs;
-      documents = docs;
+      final currentUid = FirebaseAuth.instance.currentUser?.uid;
+      final List<QueryDocumentSnapshot> docs = snapshot.docs.where((doc) {
+        final uid = doc['uid'];
+        return currentUid == uid;
+      }).toList();
+      myDocuments = docs;
 
       _filterDocuments();
     });
@@ -44,18 +48,24 @@ class Calender extends ChangeNotifier {
   }
 
   void _filterDocuments() {
-    if (documents == null) {
+    if (myDocuments == null) {
       return notifyListeners();
     }
-    final currentUid = FirebaseAuth.instance.currentUser?.uid;
-    final List<QueryDocumentSnapshot> filtered = documents!.where((doc) {
+    final List<QueryDocumentSnapshot> filtered = myDocuments!.where((doc) {
       final date = (doc['date'] as Timestamp).toDate();
-      final uid = doc['uid'];
-      return isSameDay(selectedDay, date) && currentUid == uid;
+      return isSameDay(selectedDay, date);
     }).toList();
-    filtered.sort((a, b) => a['date'].compareTo(b['date']));
 
-    filteredDocuments = filtered;
+    selectedDayDocuments = filtered;
     notifyListeners();
+  }
+
+  List<QueryDocumentSnapshot> getEventsForDay(DateTime day) {
+    if (myDocuments == null) return [];
+
+    return myDocuments!.where((doc) {
+      final date = (doc['date'] as Timestamp).toDate();
+      return isSameDay(date, day);
+    }).toList();
   }
 }

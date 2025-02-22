@@ -10,18 +10,18 @@ class MemoArea extends StatelessWidget {
   Widget build(BuildContext context) {
     final model = context.watch<Calender>();
 
-    final List<QueryDocumentSnapshot>? filteredDocuments =
-        model.filteredDocuments;
+    final List<QueryDocumentSnapshot>? selectedDayDocuments =
+        model.selectedDayDocuments;
 
-    if (filteredDocuments == null) {
+    if (selectedDayDocuments == null) {
       return const CircularProgressIndicator();
     }
 
     return Expanded(
         child: ListView.builder(
-            itemCount: filteredDocuments.length,
+            itemCount: selectedDayDocuments.length,
             itemBuilder: (context, index) {
-              final document = filteredDocuments[index];
+              final document = selectedDayDocuments[index];
               final date = (document['date'] as Timestamp).toDate();
               return ListTile(
                 trailing: IconButton(
