@@ -14,7 +14,17 @@ class HomePage extends StatelessWidget {
     return MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: model.color),
+          colorScheme: ColorScheme(
+            primary: model.color,
+            onPrimary: model.textColor,
+            secondary: Colors.blue,
+            onSecondary: Colors.white,
+            error: Colors.red,
+            onError: Colors.white,
+            surface: Colors.white,
+            onSurface: Colors.black,
+            brightness: Brightness.light,
+          ),
           useMaterial3: true,
           appBarTheme: AppBarTheme(
               backgroundColor: model.color, foregroundColor: model.textColor),
