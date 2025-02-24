@@ -33,7 +33,7 @@ class DeleteAccountDialog extends StatelessWidget {
               onPressed: () async {
                 try {
                   await model.deleteAccount();
-                  Navigator.of(context).pop(true);
+                  Navigator.of(context).popUntil((route) => route.isFirst);
                 } catch (e) {
                   // エラーハンドリング
                   Navigator.of(context).pop(false);
