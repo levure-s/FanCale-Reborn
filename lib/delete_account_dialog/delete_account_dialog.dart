@@ -17,33 +17,42 @@ class DeleteAccountDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final model = context.watch<DeleteAccountModel>();
+
     return AlertDialog(
       title: const Text('アカウントの削除'),
-      content: const Text('アカウントを削除すると、すべてのデータが完全に削除され、'
-          '復元することはできません。\n\n'
-          'アカウントを削除してもよろしいですか？'),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(false),
-          child: const Text('キャンセル'),
-        ),
-        Consumer<DeleteAccountModel>(
-          builder: (context, model, child) {
-            return TextButton(
-              onPressed: () async {
-                try {
-                  await model.deleteAccount();
-                  Navigator.of(context).popUntil((route) => route.isFirst);
-                } catch (e) {
-                  // エラーハンドリング
-                  Navigator.of(context).pop(false);
-                }
-              },
-              child: const Text('削除する'),
-            );
-          },
-        ),
-      ],
+      content: model.isLoading
+          ? const Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text('アカウントを削除しています...'),
+                SizedBox(height: 16),
+                CircularProgressIndicator(),
+              ],
+            )
+          : const Text('アカウントを削除すると、すべてのデータが完全に削除され、'
+              '復元することはできません。\n\n'
+              'アカウントを削除してもよろしいですか？'),
+      actions: model.isLoading
+          ? null // ローディング中はボタンを表示しない
+          : [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: const Text('キャンセル'),
+              ),
+              TextButton(
+                onPressed: () async {
+                  try {
+                    await model.deleteAccount();
+                    Navigator.of(context).popUntil((route) => route.isFirst);
+                  } catch (e) {
+                    // エラーハンドリング
+                    Navigator.of(context).pop(false);
+                  }
+                },
+                child: const Text('削除する'),
+              ),
+            ],
     );
   }
 }
