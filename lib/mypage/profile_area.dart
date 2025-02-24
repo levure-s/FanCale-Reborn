@@ -1,3 +1,4 @@
+import 'package:fancale/delete_account_dialog/delete_account_dialog.dart';
 import 'package:fancale/mypage/my_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -36,7 +37,16 @@ class ProfileArea extends StatelessWidget {
                   }
                 }
               },
-              child: const Text('ログアウト'))
+              child: const Text('ログアウト')),
+          const SizedBox(height: 16),
+          TextButton(
+              onPressed: () async {
+                final bool? result = await DeleteAccountDialog.show(context);
+                if (result == true) {
+                  Navigator.of(context).pop(); // プロフィール画面を閉じる
+                }
+              },
+              child: const Text('アカウントを削除')),
         ],
       ),
     );
