@@ -42,20 +42,28 @@ class MemoArea extends StatelessWidget {
 
             final document = selectedDayDocuments[index];
             final date = (document['date'] as Timestamp).toDate();
-            return ListTile(
-              trailing: IconButton(
-                onPressed: () async {
-                  await FirebaseFirestore.instance
-                      .collection('calendar')
-                      .doc(document.id)
-                      .delete();
-                  model.fetchCalender();
-                },
-                icon: const Icon(Icons.delete),
-              ),
-              title: Text(document['memo']),
-              subtitle: Text('${date.year}/${date.month}/${date.day}'),
-            );
+
+            try {
+              return ListTile(
+                trailing: IconButton(
+                  onPressed: () async {
+                    await FirebaseFirestore.instance
+                        .collection('calendar')
+                        .doc(document.id)
+                        .delete();
+                    model.fetchCalender();
+                  },
+                  icon: const Icon(Icons.delete),
+                ),
+                title: Text(document['memo']),
+                subtitle: Text('${date.year}/${date.month}/${date.day}'),
+              );
+            } catch (e) {
+              return ListTile(
+                title: Text('🎂 ${document["title"]}'),
+                subtitle: Text('${date.month}/${date.day}'),
+              );
+            }
           }),
     );
   }
