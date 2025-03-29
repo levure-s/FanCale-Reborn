@@ -1,5 +1,4 @@
 import 'package:fancale/calender/components/calender_body.dart';
-import 'package:fancale/calender/components/add_button.dart';
 import 'package:fancale/calender/components/mypage_button.dart';
 import 'package:fancale/calender/model/calender_model.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +15,7 @@ class CalenderPage extends StatelessWidget {
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
           title: const Text('カレンダー'),
-          actions: const [AddButton(), MypageButton()],
+          actions: const [MypageButton()],
         ),
         body: const CalenderBody(),
       ),
