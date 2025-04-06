@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fancale/calender/model/calender_model.dart';
+import 'package:fancale/edit_anniversary/edit_anniversary.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -41,8 +42,23 @@ class AnniversaryListItem extends StatelessWidget {
               await model.deleteAnniversary(document.id);
             }
           }
+          if (value == 'edit') {
+            await showDialog<String>(
+              context: context,
+              builder: (context) => EditAnniversary(
+                selectedDay: model.selectedDay,
+                id: document.id,
+                title: document["title"],
+                year: date.year == 9999 ? '' : date.year.toString(),
+              ),
+            );
+          }
         },
         itemBuilder: (context) => [
+          const PopupMenuItem(
+            value: 'edit',
+            child: Text('編集'),
+          ),
           const PopupMenuItem(
             value: 'delete',
             child: Text('削除'),
