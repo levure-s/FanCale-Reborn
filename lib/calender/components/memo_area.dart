@@ -1,5 +1,7 @@
 import 'package:fancale/calender/components/add_anniversary_button.dart';
 import 'package:fancale/calender/components/add_button.dart';
+import 'package:fancale/calender/components/anniversary_list_item.dart';
+import 'package:fancale/calender/components/memo_list_item.dart';
 import 'package:fancale/calender/model/calender_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -41,47 +43,11 @@ class MemoArea extends StatelessWidget {
             }
 
             final document = selectedDayDocuments[index];
-            final date = (document['date'] as Timestamp).toDate();
 
             if (document['memo'] is String) {
-              return ListTile(
-                trailing: IconButton(
-                  onPressed: () async {
-                    await FirebaseFirestore.instance
-                        .collection('calendar')
-                        .doc(document.id)
-                        .delete();
-                    model.fetchCalender();
-                  },
-                  icon: const Icon(Icons.delete),
-                ),
-                title: Text(document['memo']),
-                subtitle: Text('${date.year}/${date.month}/${date.day}'),
-              );
+              return MemoListItem(document: document);
             } else {
-              return ListTile(
-                title: Text('🎂 ${document["title"]}'),
-                subtitle: Text('${date.month}/${date.day}'),
-                trailing: PopupMenuButton<String>(
-                  icon: const Icon(Icons.more_vert),
-                  onSelected: (value) async {
-                    if (value == 'delete') {
-                      // 削除処理
-                      await FirebaseFirestore.instance
-                          .collection('anniversaries')
-                          .doc(document.id)
-                          .delete();
-                      model.fetchCalender();
-                    }
-                  },
-                  itemBuilder: (context) => [
-                    const PopupMenuItem<String>(
-                      value: 'delete',
-                      child: Text('削除'),
-                    ),
-                  ],
-                ),
-              );
+              return AnniversaryListItem(document: document);
             }
           }),
     );
