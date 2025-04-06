@@ -62,6 +62,25 @@ class MemoArea extends StatelessWidget {
               return ListTile(
                 title: Text('🎂 ${document["title"]}'),
                 subtitle: Text('${date.month}/${date.day}'),
+                trailing: PopupMenuButton<String>(
+                  icon: const Icon(Icons.more_vert),
+                  onSelected: (value) async {
+                    if (value == 'delete') {
+                      // 削除処理
+                      await FirebaseFirestore.instance
+                          .collection('anniversaries')
+                          .doc(document.id)
+                          .delete();
+                      model.fetchCalender();
+                    }
+                  },
+                  itemBuilder: (context) => [
+                    const PopupMenuItem<String>(
+                      value: 'delete',
+                      child: Text('削除'),
+                    ),
+                  ],
+                ),
               );
             }
           }),
