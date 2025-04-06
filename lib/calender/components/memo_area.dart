@@ -43,7 +43,7 @@ class MemoArea extends StatelessWidget {
             final document = selectedDayDocuments[index];
             final date = (document['date'] as Timestamp).toDate();
 
-            try {
+            if (document['memo'] is String) {
               return ListTile(
                 trailing: IconButton(
                   onPressed: () async {
@@ -58,7 +58,7 @@ class MemoArea extends StatelessWidget {
                 title: Text(document['memo']),
                 subtitle: Text('${date.year}/${date.month}/${date.day}'),
               );
-            } catch (e) {
+            } else {
               return ListTile(
                 title: Text('🎂 ${document["title"]}'),
                 subtitle: Text('${date.month}/${date.day}'),

@@ -16,6 +16,7 @@ class AddAnniversaryModel extends ChangeNotifier {
       'date': Timestamp.fromDate(selectedDay), // 日付をTimestampとして保存
       'title': text,
       'uid': uid,
+      'memo': [],
     });
     notifyListeners();
   }
