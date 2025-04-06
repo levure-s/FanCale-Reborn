@@ -118,4 +118,17 @@ class Calender extends ChangeNotifier {
 
     return events;
   }
+
+  Future<void> deleteAnniversary(String docId) async {
+    await FirebaseFirestore.instance
+        .collection('anniversaries')
+        .doc(docId)
+        .delete();
+    fetchCalender();
+  }
+
+  Future<void> deleteMemo(String docId) async {
+    await FirebaseFirestore.instance.collection('calendar').doc(docId).delete();
+    fetchCalender();
+  }
 }

@@ -16,11 +16,7 @@ class MemoListItem extends StatelessWidget {
     return ListTile(
       trailing: IconButton(
         onPressed: () async {
-          await FirebaseFirestore.instance
-              .collection('calendar')
-              .doc(document.id)
-              .delete();
-          model.fetchCalender();
+          await model.deleteMemo(document.id);
         },
         icon: const Icon(Icons.delete),
       ),

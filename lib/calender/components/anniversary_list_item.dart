@@ -38,11 +38,7 @@ class AnniversaryListItem extends StatelessWidget {
             );
 
             if (confirm == true) {
-              await FirebaseFirestore.instance
-                  .collection('anniversaries')
-                  .doc(document.id)
-                  .delete();
-              model.fetchCalender();
+              await model.deleteAnniversary(document.id);
             }
           }
         },
