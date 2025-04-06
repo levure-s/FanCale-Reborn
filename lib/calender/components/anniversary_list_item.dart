@@ -19,11 +19,31 @@ class AnniversaryListItem extends StatelessWidget {
       trailing: PopupMenuButton<String>(
         onSelected: (value) async {
           if (value == 'delete') {
-            await FirebaseFirestore.instance
-                .collection('anniversaries')
-                .doc(document.id)
-                .delete();
-            model.fetchCalender();
+            final confirm = await showDialog<bool>(
+              context: context,
+              builder: (context) => AlertDialog(
+                title: const Text('削除の確認'),
+                content: const Text('この記念日を削除してもよろしいですか？'),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(context, false),
+                    child: const Text('キャンセル'),
+                  ),
+                  TextButton(
+                    onPressed: () => Navigator.pop(context, true),
+                    child: const Text('削除する'),
+                  ),
+                ],
+              ),
+            );
+
+            if (confirm == true) {
+              await FirebaseFirestore.instance
+                  .collection('anniversaries')
+                  .doc(document.id)
+                  .delete();
+              model.fetchCalender();
+            }
           }
         },
         itemBuilder: (context) => [
