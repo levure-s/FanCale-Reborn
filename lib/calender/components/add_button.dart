@@ -20,9 +20,11 @@ class AddButton extends StatelessWidget {
         icon: Row(
           mainAxisSize: MainAxisSize.min, // 横幅をアイコンの幅に合わせる
           children: [
-            const Icon(Icons.add, size: 20),
+            const Icon(Icons.add, size: 18),
             const SizedBox(width: 2),
-            const Icon(Icons.calendar_today, size: 24),
+            const Icon(Icons.calendar_today, size: 20),
+            const SizedBox(width: 2),
+            const Text('メモ')
           ],
         ));
   }
