@@ -12,11 +12,9 @@ class MemoListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final model = context.read<Calender>();
-    final date = (document['date'] as Timestamp).toDate();
 
     return ListTile(
       title: Text(document['memo']),
-      subtitle: Text('${date.year}/${date.month}/${date.day}'),
       trailing: PopupMenuButton<String>(
         onSelected: (value) async {
           if (value == 'delete') {

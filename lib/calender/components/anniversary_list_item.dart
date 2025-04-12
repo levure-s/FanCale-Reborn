@@ -25,8 +25,11 @@ class AnniversaryListItem extends StatelessWidget {
     }
 
     return ListTile(
-      title: Text('🎂 ${document["title"]}'),
-      subtitle: years > 0 ? Text('$years周年') : null,
+      title: Text(
+        '🎂 ${document["title"]}',
+        style: TextStyle(fontSize: 18),
+      ),
+      subtitle: years > 0 ? _buildAnniversaryBadge(years, context) : null,
       trailing: PopupMenuButton<String>(
         onSelected: (value) async {
           if (value == 'delete') {
@@ -72,6 +75,33 @@ class AnniversaryListItem extends StatelessWidget {
           const PopupMenuItem(
             value: 'delete',
             child: Text('削除'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAnniversaryBadge(int years, BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 8, vertical: 4), // 余白
+            decoration: BoxDecoration(
+              color: const Color.fromARGB(255, 250, 197, 74),
+              borderRadius: BorderRadius.circular(20), // 丸くする
+            ),
+            child: Text(
+              '$years周年',
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 12,
+              ),
+            ),
           ),
         ],
       ),
