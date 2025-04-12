@@ -6,17 +6,27 @@ import 'package:provider/provider.dart';
 
 class AnniversaryListItem extends StatelessWidget {
   final DocumentSnapshot document;
+  final DateTime selectedDay;
 
-  const AnniversaryListItem({super.key, required this.document});
+  const AnniversaryListItem({
+    super.key,
+    required this.document,
+    required this.selectedDay,
+  });
 
   @override
   Widget build(BuildContext context) {
     final model = context.read<Calender>();
     final date = (document['date'] as Timestamp).toDate();
+    int years = selectedDay.year - date.year;
+    if (selectedDay.month < date.month ||
+        (selectedDay.month == date.month && selectedDay.day < date.day)) {
+      years--;
+    }
 
     return ListTile(
       title: Text('🎂 ${document["title"]}'),
-      subtitle: Text('${date.month}/${date.day}'),
+      subtitle: years > 0 ? Text('$years周年') : null,
       trailing: PopupMenuButton<String>(
         onSelected: (value) async {
           if (value == 'delete') {
