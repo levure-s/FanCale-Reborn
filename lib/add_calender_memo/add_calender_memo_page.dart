@@ -13,7 +13,7 @@ class AddClenderMemo extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (_) => AddClenderMemoModel(),
       child: AlertDialog(
-        title: const Text('メモを入力してください'),
+        title: const Text('予定を入力してください'),
         content: TextField(controller: controller),
         actions: [
           TextButton(
