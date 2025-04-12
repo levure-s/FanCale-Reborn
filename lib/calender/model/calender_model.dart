@@ -14,7 +14,8 @@ class Calender extends ChangeNotifier {
   DateTime? selectedDay;
   List<QueryDocumentSnapshot>? myDocuments;
   List<QueryDocumentSnapshot>? anniversaryDocuments;
-  List<QueryDocumentSnapshot>? selectedDayDocuments;
+  List<QueryDocumentSnapshot>? _selectedDayMemos;
+  List<QueryDocumentSnapshot>? _selectedDayAnniversaries;
 
   void fetchCalender() {
     _anniversarySnapshots.listen((QuerySnapshot snapshot) {
@@ -71,7 +72,7 @@ class Calender extends ChangeNotifier {
       return isSameDay(selectedDay, date);
     }).toList();
 
-    selectedDayDocuments?.addAll(filtered);
+    _selectedDayMemos = filtered;
     notifyListeners();
   }
 
@@ -90,7 +91,7 @@ class Calender extends ChangeNotifier {
       return selectedDayMonth == date.month && selectedDayDay == date.day;
     }).toList();
 
-    selectedDayDocuments = filtered;
+    _selectedDayAnniversaries = filtered;
     notifyListeners();
   }
 
@@ -117,6 +118,20 @@ class Calender extends ChangeNotifier {
     }
 
     return events;
+  }
+
+  List<QueryDocumentSnapshot> get selectedDayDocuments {
+    final List<QueryDocumentSnapshot> result = [];
+
+    if (_selectedDayAnniversaries != null) {
+      result.addAll(_selectedDayAnniversaries!);
+    }
+
+    if (_selectedDayMemos != null) {
+      result.addAll(_selectedDayMemos!);
+    }
+
+    return result;
   }
 
   Future<void> deleteAnniversary(String docId) async {
