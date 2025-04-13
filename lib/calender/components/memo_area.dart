@@ -14,10 +14,10 @@ class MemoArea extends StatelessWidget {
   Widget build(BuildContext context) {
     final model = context.watch<Calender>();
 
-    final List<QueryDocumentSnapshot>? selectedDayDocuments =
+    final List<QueryDocumentSnapshot> selectedDayDocuments =
         model.selectedDayDocuments;
 
-    if (selectedDayDocuments == null) {
+    if (selectedDayDocuments == []) {
       return const CircularProgressIndicator();
     }
 
@@ -47,7 +47,10 @@ class MemoArea extends StatelessWidget {
             if (document['memo'] is String) {
               return MemoListItem(document: document);
             } else {
-              return AnniversaryListItem(document: document);
+              return AnniversaryListItem(
+                document: document,
+                selectedDay: model.selectedDay!,
+              );
             }
           }),
     );

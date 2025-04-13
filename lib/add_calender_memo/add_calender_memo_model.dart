@@ -8,7 +8,7 @@ class AddClenderMemoModel extends ChangeNotifier {
       throw '日付を選択してください';
     }
     if (text == null || text == '') {
-      throw 'メモを入力してください';
+      throw '予定を入力してください';
     }
 
     final uid = FirebaseAuth.instance.currentUser?.uid;
