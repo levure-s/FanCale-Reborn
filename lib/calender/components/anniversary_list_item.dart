@@ -24,57 +24,80 @@ class AnniversaryListItem extends StatelessWidget {
       years--;
     }
 
-    return ListTile(
-      title: Text(
-        '🎂 ${document["title"]}',
-        style: TextStyle(fontSize: 18),
-      ),
-      subtitle: years > 0 ? _buildAnniversaryBadge(years, context) : null,
-      trailing: PopupMenuButton<String>(
-        onSelected: (value) async {
-          if (value == 'delete') {
-            final confirm = await showDialog<bool>(
-              context: context,
-              builder: (context) => AlertDialog(
-                title: const Text('削除の確認'),
-                content: const Text('この記念日を削除してもよろしいですか？'),
-                actions: [
-                  TextButton(
-                    onPressed: () => Navigator.pop(context, false),
-                    child: const Text('キャンセル'),
-                  ),
-                  TextButton(
-                    onPressed: () => Navigator.pop(context, true),
-                    child: const Text('削除する'),
-                  ),
-                ],
-              ),
-            );
-
-            if (confirm == true) {
-              await model.deleteAnniversary(document.id);
-            }
-          }
-          if (value == 'edit') {
-            await showDialog<String>(
-              context: context,
-              builder: (context) => EditAnniversary(
-                selectedDay: model.selectedDay,
-                id: document.id,
-                title: document["title"],
-                year: date.year == 9999 ? '' : date.year.toString(),
-              ),
-            );
-          }
-        },
-        itemBuilder: (context) => [
-          const PopupMenuItem(
-            value: 'edit',
-            child: Text('編集'),
+    return Dismissible(
+        key: Key(document.id),
+        direction: DismissDirection.endToStart,
+        background: Container(
+          color: Theme.of(context).colorScheme.primary,
+          child: Align(
+            alignment: Alignment.centerRight,
+            child: Padding(
+                padding: EdgeInsets.only(right: 20.0),
+                child: Icon(Icons.delete,
+                    color: Theme.of(context).colorScheme.onPrimary)),
           ),
-          const PopupMenuItem(
-            value: 'delete',
-            child: Text('削除'),
+        ),
+        confirmDismiss: (direction) async {
+          return await _showDeleteDialog(context);
+        },
+        onDismissed: (direction) async {
+          await model.deleteAnniversary(document.id);
+        },
+        child: ListTile(
+          title: Text(
+            '🎂 ${document["title"]}',
+            style: TextStyle(fontSize: 18),
+          ),
+          subtitle: years > 0 ? _buildAnniversaryBadge(years, context) : null,
+          trailing: PopupMenuButton<String>(
+            onSelected: (value) async {
+              if (value == 'delete') {
+                final confirm = await _showDeleteDialog(context);
+
+                if (confirm == true) {
+                  await model.deleteAnniversary(document.id);
+                }
+              }
+              if (value == 'edit') {
+                await showDialog<String>(
+                  context: context,
+                  builder: (context) => EditAnniversary(
+                    selectedDay: model.selectedDay,
+                    id: document.id,
+                    title: document["title"],
+                    year: date.year == 9999 ? '' : date.year.toString(),
+                  ),
+                );
+              }
+            },
+            itemBuilder: (context) => [
+              const PopupMenuItem(
+                value: 'edit',
+                child: Text('編集'),
+              ),
+              const PopupMenuItem(
+                value: 'delete',
+                child: Text('削除'),
+              ),
+            ],
+          ),
+        ));
+  }
+
+  Future<bool?> _showDeleteDialog(BuildContext context) async {
+    return await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('削除の確認'),
+        content: const Text('この記念日を削除してもよろしいですか？'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('キャンセル'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('削除する'),
           ),
         ],
       ),
