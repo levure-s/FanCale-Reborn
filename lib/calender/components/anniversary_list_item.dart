@@ -6,17 +6,30 @@ import 'package:provider/provider.dart';
 
 class AnniversaryListItem extends StatelessWidget {
   final DocumentSnapshot document;
+  final DateTime selectedDay;
 
-  const AnniversaryListItem({super.key, required this.document});
+  const AnniversaryListItem({
+    super.key,
+    required this.document,
+    required this.selectedDay,
+  });
 
   @override
   Widget build(BuildContext context) {
     final model = context.read<Calender>();
     final date = (document['date'] as Timestamp).toDate();
+    int years = selectedDay.year - date.year;
+    if (selectedDay.month < date.month ||
+        (selectedDay.month == date.month && selectedDay.day < date.day)) {
+      years--;
+    }
 
     return ListTile(
-      title: Text('🎂 ${document["title"]}'),
-      subtitle: Text('${date.month}/${date.day}'),
+      title: Text(
+        '🎂 ${document["title"]}',
+        style: TextStyle(fontSize: 18),
+      ),
+      subtitle: years > 0 ? _buildAnniversaryBadge(years, context) : null,
       trailing: PopupMenuButton<String>(
         onSelected: (value) async {
           if (value == 'delete') {
@@ -62,6 +75,33 @@ class AnniversaryListItem extends StatelessWidget {
           const PopupMenuItem(
             value: 'delete',
             child: Text('削除'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAnniversaryBadge(int years, BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 8, vertical: 4), // 余白
+            decoration: BoxDecoration(
+              color: const Color.fromARGB(255, 250, 197, 74),
+              borderRadius: BorderRadius.circular(20), // 丸くする
+            ),
+            child: Text(
+              '$years周年',
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 12,
+              ),
+            ),
           ),
         ],
       ),

@@ -47,7 +47,10 @@ class MemoArea extends StatelessWidget {
             if (document['memo'] is String) {
               return MemoListItem(document: document);
             } else {
-              return AnniversaryListItem(document: document);
+              return AnniversaryListItem(
+                document: document,
+                selectedDay: model.selectedDay!,
+              );
             }
           }),
     );
