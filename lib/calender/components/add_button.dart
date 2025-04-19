@@ -24,7 +24,7 @@ class AddButton extends StatelessWidget {
             const SizedBox(width: 2),
             const Icon(Icons.calendar_today, size: 20),
             const SizedBox(width: 2),
-            const Text('メモ')
+            const Text('予定')
           ],
         ));
   }
