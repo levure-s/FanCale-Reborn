@@ -33,20 +33,9 @@ class AddAnniversary extends StatelessWidget {
                     ),
                   ),
                 ),
-                PopupMenuButton<int>(
+                IconButton(
                   icon: const Icon(Icons.arrow_drop_down),
-                  onSelected: (value) {
-                    yearController.text = value.toString();
-                  },
-                  itemBuilder: (context) {
-                    return List.generate(30, (index) {
-                      final year = DateTime.now().year - index;
-                      return PopupMenuItem(
-                        value: year,
-                        child: Text('$year年'),
-                      );
-                    });
-                  },
+                  onPressed: () => _showYearPicker(context, yearController),
                 ),
                 TextButton(
                   onPressed: () {
@@ -83,6 +72,38 @@ class AddAnniversary extends StatelessWidget {
           })
         ],
       ),
+    );
+  }
+
+  void _showYearPicker(
+      BuildContext context, TextEditingController yearController) {
+    final now = DateTime.now().year;
+    final int startYear = 1;
+    final initialIndex = int.tryParse(yearController.text) ?? now;
+    final scrollIndex = (initialIndex - startYear).clamp(0, now - startYear);
+
+    showModalBottomSheet(
+      context: context,
+      builder: (_) {
+        return SizedBox(
+          height: 300,
+          child: ListView.builder(
+            itemExtent: 48,
+            controller: ScrollController(initialScrollOffset: scrollIndex * 48),
+            itemCount: now - startYear + 1,
+            itemBuilder: (_, index) {
+              final year = startYear + index;
+              return ListTile(
+                title: Center(child: Text('$year年')),
+                onTap: () {
+                  yearController.text = year.toString();
+                  Navigator.pop(context);
+                },
+              );
+            },
+          ),
+        );
+      },
     );
   }
 }
