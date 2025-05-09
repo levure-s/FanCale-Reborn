@@ -79,29 +79,84 @@ class AddAnniversary extends StatelessWidget {
       BuildContext context, TextEditingController yearController) {
     final now = DateTime.now().year;
     final int startYear = 1;
+    final itemHeight = 48.0;
     final initialIndex = int.tryParse(yearController.text) ?? now;
     final scrollIndex = (initialIndex - startYear).clamp(0, now - startYear);
+    final controller = FixedExtentScrollController(initialItem: scrollIndex);
+
+    int selectedIndex = scrollIndex;
 
     showModalBottomSheet(
       context: context,
+      backgroundColor: Colors.transparent,
       builder: (_) {
-        return SizedBox(
-          height: 300,
-          child: ListView.builder(
-            itemExtent: 48,
-            controller: ScrollController(initialScrollOffset: scrollIndex * 48),
-            itemCount: now - startYear + 1,
-            itemBuilder: (_, index) {
-              final year = startYear + index;
-              return ListTile(
-                title: Center(child: Text('$year年')),
-                onTap: () {
-                  yearController.text = year.toString();
-                  Navigator.pop(context);
-                },
-              );
-            },
-          ),
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return Container(
+              height: 300,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+              ),
+              child: Stack(
+                children: [
+                  // グラデーションレイヤー
+                  Positioned.fill(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                            Colors.black.withOpacity(0.6),
+                            Colors.transparent,
+                            Colors.transparent,
+                            Colors.black.withOpacity(0.6),
+                          ],
+                          stops: [0, 0.3, 0.7, 1],
+                        ),
+                      ),
+                    ),
+                  ),
+                  // リストホイール
+                  ListWheelScrollView.useDelegate(
+                    controller: controller,
+                    itemExtent: itemHeight,
+                    physics: const FixedExtentScrollPhysics(),
+                    onSelectedItemChanged: (index) {
+                      setState(() => selectedIndex = index);
+                    },
+                    childDelegate: ListWheelChildBuilderDelegate(
+                      builder: (context, index) {
+                        final year = startYear + index;
+                        final isCenter = (index == selectedIndex);
+                        return GestureDetector(
+                          onTap: () {
+                            if (isCenter) {
+                              yearController.text = year.toString();
+                              Navigator.pop(context);
+                            }
+                          },
+                          child: Container(
+                            alignment: Alignment.center,
+                            child: Text(
+                              '$year年',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: isCenter ? Colors.black : Colors.grey,
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                      childCount: now - startYear + 1,
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
         );
       },
     );
